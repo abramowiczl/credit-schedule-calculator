@@ -1,0 +1,4 @@
+lending_rate: 0.05
+capital: 500000
+amount_of_installments: 500
+overpayment: 500
