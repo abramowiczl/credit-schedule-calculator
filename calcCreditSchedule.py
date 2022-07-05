@@ -3,11 +3,8 @@ from datetime import datetime
 import pandas as pd
 import plotly.express as px
 import yaml
-from dash import Dash, html, dcc, callback
-from dash.dependencies import Input, Output
 
 from utils.calculations import calcSchedule
-from utils.formats import format2DecimalPoints
 
 with open('config.yml') as f:
     config = yaml.load(f, Loader=yaml.FullLoader)
@@ -45,48 +42,3 @@ def createFig(schedule):
 
 schedule_no_overpayment = calcScheduleWithOverpayment(0)
 total_interest_no_overpayment = pd.DataFrame(schedule_no_overpayment)['Installment_interest'].sum()
-
-app = Dash(__name__)
-
-app.layout = html.Div(
-    children=[
-        html.Span('Wysokosc nadplaty: '),
-        dcc.Input(value=1000, type="number", id="overpayment-input", step=250),
-        html.Div('Roznica w koszcie kredytu to: '),
-        html.Span(
-            id='cost-diff',
-            style={
-                'font-weight': 'bold',
-                'font-size': '36px',
-                'color': 'gray'
-            }
-        ),
-        dcc.Loading(
-            id="graph-loader",
-            children=[
-                html.Div(
-                    id="graph-loader-placeholder"
-                )
-            ]
-        ),
-        dcc.Graph(id="graph")
-    ],
-    style={'font-size': '20px'}
-)
-
-@callback(
-        Output("graph", "figure"),
-        Output("cost-diff", "children"),
-        Output("graph-loader-placeholder", "children"),
-        Input("overpayment-input", "value")
-)
-def update_graph(overpayment: int):
-    if overpayment is None:
-        overpayment = 0
-    schedule = calcScheduleWithOverpayment(overpayment)
-    total_interest = pd.DataFrame(schedule)['Installment_interest'].sum()
-    diff = total_interest_no_overpayment - total_interest
-    return createFig(schedule), format2DecimalPoints(diff), ''
-
-if __name__ == '__main__':
-    app.run_server(debug=True)
