@@ -13,11 +13,12 @@ spread = config['spread']
 lending_rate = spread + wibor_6m
 capital = config['capital']
 amount_of_installments_left = config['amount_of_installments_left']
+starting_month = config['starting_month']
 
 def calcScheduleWithOverpayment(overpayment, initial_overpayment = 0):
     initial_capital = capital - initial_overpayment
     return calcSchedule(
-        datetime(2022, 7, 1),
+        datetime(2022, starting_month, 1),
         initial_capital,
         lending_rate,
         amount_of_installments_left,

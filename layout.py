@@ -56,7 +56,8 @@ app.layout = html.Div(
             id="graph-loader",
             children=[
                 html.Div(
-                    id="graph-loader-placeholder"
+                    id="graph-loader-placeholder",
+                    className="mt-5"
                 )
             ]
         ),
