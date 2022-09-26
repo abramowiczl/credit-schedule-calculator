@@ -4,8 +4,8 @@ import dash_bootstrap_components as dbc
 from dash import Dash, html, dcc, callback
 from dash.dependencies import Input, Output
 
-from calcCreditSchedule import calcScheduleWithOverpayment, total_interest_no_overpayment, createFig
-from utils.formats import format2DecimalPoints
+from calc_credit_schedule import calc_schedule_w_overpayment, total_interest_no_overpayment, create_fig
+from utils.formats import format_2_decimal_points
 
 app = Dash(__name__, external_stylesheets=[dbc.themes.BOOTSTRAP])
 app.title = 'Credit calculator'
@@ -73,10 +73,10 @@ app.layout = html.Div(
 def update_graph(overpayment: int):
     if overpayment is None:
         overpayment = 0
-    schedule = calcScheduleWithOverpayment(overpayment)
+    schedule = calc_schedule_w_overpayment(overpayment)
     total_interest = pd.DataFrame(schedule)['Installment_interest'].sum()
     diff = total_interest_no_overpayment - total_interest
-    return createFig(schedule), format2DecimalPoints(diff), ''
+    return create_fig(schedule), format_2_decimal_points(diff), ''
 
 if __name__ == '__main__':
     app.run_server(debug=True)

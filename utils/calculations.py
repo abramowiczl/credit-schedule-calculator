@@ -1,16 +1,19 @@
 import calendar
 from dateutil.relativedelta import relativedelta
 
-def calcInterest(capital, datetime, lending_rate):
+def diff_month(d1, d2):
+    return (d1.year - d2.year) * 12 + d1.month - d2.month
+
+def calc_interest(capital, datetime, lending_rate):
     days_in_month = calendar.monthrange(datetime.year, datetime.month)[1]
     return capital * lending_rate * days_in_month / 365
 
-def calcSchedule(current_date, capital, lending_rate, total_num_of_installments, num_of_installments_left, overpayment, data):
+def calc_schedule(current_date, capital, lending_rate, total_num_of_installments, num_of_installments_left, overpayment, data):
     if (capital <= 0):
         capital = 0
         overpayment = 0
     installment_capital_part = capital / num_of_installments_left
-    installment_interest = calcInterest(capital, current_date, lending_rate)
+    installment_interest = calc_interest(capital, current_date, lending_rate)
     capital_left = capital - installment_capital_part - overpayment
     installment = installment_capital_part + installment_interest
 
@@ -25,6 +28,6 @@ def calcSchedule(current_date, capital, lending_rate, total_num_of_installments,
 
     if(num_of_installments_left > 1):
         next_month = current_date + relativedelta(months=1)
-        return calcSchedule(next_month, capital_left, lending_rate, total_num_of_installments, num_of_installments_left - 1, overpayment, data)
+        return calc_schedule(next_month, capital_left, lending_rate, total_num_of_installments, num_of_installments_left - 1, overpayment, data)
     else:
         return data

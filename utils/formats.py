@@ -1,5 +1,2 @@
-def format2DecimalPoints(num):
+def format_2_decimal_points(num):
     return "{:,.2f}".format(num)
-
-def formatColumnSplit(num):
-    return '|' + str(format2DecimalPoints(num)) + '|'

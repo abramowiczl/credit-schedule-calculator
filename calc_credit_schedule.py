@@ -4,10 +4,7 @@ import pandas as pd
 import plotly.express as px
 import yaml
 
-from utils.calculations import calcSchedule
-
-def diff_month(d1, d2):
-    return (d1.year - d2.year) * 12 + d1.month - d2.month
+from utils.calculations import calc_schedule, diff_month
 
 with open('config.yml') as f:
     config = yaml.load(f, Loader=yaml.FullLoader)
@@ -17,10 +14,10 @@ lending_rate = spread + wibor_6m
 capital = config['capital']
 last_installment_date = datetime.strptime(config['last_installment_date'], '%m-%Y').date()
 
-def calcScheduleWithOverpayment(overpayment, initial_overpayment = 0):
+def calc_schedule_w_overpayment(overpayment, initial_overpayment = 0):
     initial_capital = capital - initial_overpayment
     total_num_of_installments = diff_month(last_installment_date, datetime.now())
-    return calcSchedule(
+    return calc_schedule(
         datetime.now(),
         initial_capital,
         lending_rate,
@@ -30,7 +27,7 @@ def calcScheduleWithOverpayment(overpayment, initial_overpayment = 0):
         []
     )
 
-def createFig(schedule):
+def create_fig(schedule):
     return px.bar(
         schedule,
         x="Date",
@@ -42,5 +39,5 @@ def createFig(schedule):
         }
     )
 
-schedule_no_overpayment = calcScheduleWithOverpayment(0)
+schedule_no_overpayment = calc_schedule_w_overpayment(0)
 total_interest_no_overpayment = pd.DataFrame(schedule_no_overpayment)['Installment_interest'].sum()
