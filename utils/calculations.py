@@ -1,7 +1,5 @@
 import calendar
-
 from dateutil.relativedelta import relativedelta
-
 
 def calcInterest(capital, datetime, lending_rate):
     days_in_month = calendar.monthrange(datetime.year, datetime.month)[1]
@@ -29,4 +27,4 @@ def calcSchedule(current_date, capital, lending_rate, total_num_of_installments,
         next_month = current_date + relativedelta(months=1)
         return calcSchedule(next_month, capital_left, lending_rate, total_num_of_installments, num_of_installments_left - 1, overpayment, data)
     else:
-        return data;
+        return data

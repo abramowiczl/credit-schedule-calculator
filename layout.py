@@ -1,4 +1,3 @@
-
 import pandas as pd
 import dash_bootstrap_components as dbc
 
@@ -8,9 +7,8 @@ from dash.dependencies import Input, Output
 from calcCreditSchedule import calcScheduleWithOverpayment, total_interest_no_overpayment, createFig
 from utils.formats import format2DecimalPoints
 
-# app = Dash(__name__)
 app = Dash(__name__, external_stylesheets=[dbc.themes.BOOTSTRAP])
-
+app.title = 'Credit calculator'
 app.layout = html.Div(
     children=[
         html.Div(

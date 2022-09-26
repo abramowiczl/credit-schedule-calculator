@@ -1,4 +1,5 @@
-lending_rate: 0.05
-capital: 500000
-amount_of_installments: 500
+spread: 0.01
+wibor_6m: 0.01
+capital: 100000
 overpayment: 500
+last_installment_date: '11-2040'
