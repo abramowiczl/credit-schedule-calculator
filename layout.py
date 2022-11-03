@@ -13,6 +13,28 @@ app.layout = html.Div(
     children=[
         html.Div(
             [
+                html.Span('Nadplata jednorazowa: '),
+                dcc.Input(
+                    value=0,
+                    type="number",
+                    id="initial-overpayment-input",
+                    step=5000,
+                    className="mx-2  border-0",
+                    style=
+                    {
+                        'font-weight': 'bold',
+                        'width': '8em',
+                        'background': 'slategray',
+                        'color': 'white',
+                        'border-radius': '1em',
+                        'padding-left': '0.5em'
+                    }
+                )
+            ],
+            className="d-flex justify-content-start px-5 pt-5"
+        ),
+        html.Div(
+            [
                 html.Span('Nadplacajac'),
                 dcc.Input(
                     value=1000,
@@ -68,12 +90,16 @@ app.layout = html.Div(
         Output("graph", "figure"),
         Output("cost-diff", "children"),
         Output("graph-loader-placeholder", "children"),
-        Input("overpayment-input", "value")
+        Input("overpayment-input", "value"),
+        Input("initial-overpayment-input", "value")
 )
-def update_graph(overpayment: int):
+def update_graph(overpayment: int, initial_overpayment: int):
+    print('Calculating with overpayment: %s and initial overpayment: %s' % (str(overpayment), str(initial_overpayment)))
     if overpayment is None:
         overpayment = 0
-    schedule = calc_schedule_w_overpayment(overpayment)
+    if initial_overpayment is None:
+        initial_overpayment = 0
+    schedule = calc_schedule_w_overpayment(overpayment, initial_overpayment)
     total_interest = pd.DataFrame(schedule)['Installment_interest'].sum()
     diff = total_interest_no_overpayment - total_interest
     return create_fig(schedule), format_2_decimal_points(diff), ''
