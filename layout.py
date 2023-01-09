@@ -1,10 +1,11 @@
 import pandas as pd
 import dash_bootstrap_components as dbc
+import plotly.express as px
 
 from dash import Dash, html, dcc, callback
 from dash.dependencies import Input, Output
 
-from calc_credit_schedule import calc_schedule_w_overpayment, total_interest_no_overpayment, create_fig
+from utils.calculations import calc_schedule_w_overpayment
 from utils.formats import format_2_decimal_points
 
 app = Dash(__name__, external_stylesheets=[dbc.themes.BOOTSTRAP])
@@ -45,7 +46,7 @@ app.layout = html.Div(
                     style=
                     {
                         'font-weight': 'bold',
-                        'width': '4em',
+                        'width': '5em',
                         'background': 'slategray',
                         'color': 'white',
                         'border-radius': '1em',
@@ -104,5 +105,19 @@ def update_graph(overpayment: int, initial_overpayment: int):
     diff = total_interest_no_overpayment - total_interest
     return create_fig(schedule), format_2_decimal_points(diff), ''
 
+def create_fig(schedule):
+    return px.bar(
+        schedule,
+        x="Date",
+        y=["Installment_capital_part", "Installment_interest"],
+        labels={
+            "value": "Rata (PLN)",
+            "variable": "Czesc raty",
+            "Date": "Data"
+        }
+    )
+
 if __name__ == '__main__':
+    schedule_no_overpayment = calc_schedule_w_overpayment(0)
+    total_interest_no_overpayment = pd.DataFrame(schedule_no_overpayment)['Installment_interest'].sum()
     app.run_server(debug=True)
