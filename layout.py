@@ -96,10 +96,6 @@ app.layout = html.Div(
 )
 def update_graph(overpayment: int, initial_overpayment: int):
     print('Calculating with overpayment: %s and initial overpayment: %s' % (str(overpayment), str(initial_overpayment)))
-    if overpayment is None:
-        overpayment = 0
-    if initial_overpayment is None:
-        initial_overpayment = 0
     schedule = calc_schedule_w_overpayment(overpayment, initial_overpayment)
     total_interest = pd.DataFrame(schedule)['Installment_interest'].sum()
     diff = total_interest_no_overpayment - total_interest
