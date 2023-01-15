@@ -23,7 +23,7 @@ def calc_interest(capital, datetime):
 
 
 def calc_schedule(current_date, capital, num_of_installments_left, overpayment, data):
-    if (capital <= 0):
+    if capital <= 0:
         return data
     installment_capital_part = capital / num_of_installments_left
     installment_interest = calc_interest(capital, current_date)
